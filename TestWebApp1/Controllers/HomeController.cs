@@ -5,22 +5,27 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using TestWebApp1.Models;
+using HomePageApp.Models;
+using System.Collections;
 
-namespace TestWebApp1.Controllers
+namespace HomePageApp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly LinksDbContext _context;
+        private readonly HttpGetClass _getClass;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, LinksDbContext context, HttpGetClass getClass)
         {
             _logger = logger;
+            _context = context;
+            _getClass = getClass;
         }
-
+        [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            return View(_getClass.HttpGetMethod());
         }
 
         public IActionResult Privacy()
@@ -32,6 +37,14 @@ namespace TestWebApp1.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpPost]
+        public IActionResult Post(List<Link> linkPost)
+        {
+            _context.Links.Update(linkPost[0]);
+            _context.SaveChanges();
+            return NoContent();
         }
     }
 }

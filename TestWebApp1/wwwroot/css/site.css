@@ -1,7 +1,4 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
+﻿a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
@@ -12,20 +9,21 @@ a {
   color: #0366d6;
 }
 
+
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
 
+/*  */
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
+/* Sticky footer styles */
 html {
   font-size: 14px;
 }
@@ -72,6 +70,7 @@ body {
     z-index: 2;
 }
 
+/* Background picture */
 .background1 {
     background: url(https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallpapercave.com%2Fwp%2Fjsqj2Er.jpg&f=1&nofb=1);
     height: 100vh;
@@ -115,6 +114,16 @@ body {
     justify-items: center;
 }
 
+.edit-custom {
+    margin: 0;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    z-index: 3;
+    transform: translate(-50%, -50%);
+    justify-items: center;
+}
+
 .linkPadding {
     padding-top: 20px;
 }
@@ -126,8 +135,23 @@ body {
     display: none;
 }
 
-
-
 .linkHover:hover .pencilEdit {
     display: block;
+}
+
+.editBox1 {
+    visibility: hidden;
+}
+
+.editBox2 {
+    visibility: hidden;
+}
+
+.editBox3 {
+    visibility: hidden;
+}
+
+.submitButton {
+    position: relative;
+    top: 50px;
 }

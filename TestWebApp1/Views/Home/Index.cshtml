@@ -2,65 +2,142 @@
     ViewData["Title"] = "Home Page";
 }
 
-@using TestWebApp1.Views.Simple_Classes
+@using HomePageApp.Models
+@model List<Link>;
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-<!--Good morning, Richard.-->
+
+<script>
+
+    //Time scripts (first box and welcome message)
+
+    var fxn = function () {
+        var date = new Date();
+        var dateHours = date.getHours();
+        var dateMins = date.getMinutes();
+        if (dateMins < 10) {
+            dateMins = ['0', dateMins].join('')
+        }
+        dateHours2 = dateHours - 8;
+        if (dateHours2 < 0) {
+            dateHours2 = dateHours2 + 24;
+        }
+        dateHours3 = dateHours - 6;
+        if (dateHours3 < 0) {
+            dateHours3 = dateHours3 + 24;
+        }
+        document.getElementById('time').innerHTML = [dateHours, ':', dateMins].join('');
+        document.getElementById('time2').innerHTML = [(dateHours2), ':', dateMins].join('');
+        document.getElementById('time3').innerHTML = [(dateHours3), ':', dateMins].join('');
+        if (dateHours > 0 && dateHours < 12) {
+            document.getElementById('time4').innerHTML = "Good morning, Richard.";
+        }
+        else if (dateHours > 12 && dateHours < 17) {
+            document.getElementById('time4').innerHTML = "Good afternoon, Richard.";
+        }
+        else {
+            document.getElementById('time4').innerHTML = "Good evening, Richard.";
+        }
+    }
+    setInterval(fxn, 1000);
+
+    //Weather scripts (second box)
+
+    function weatherBalloon(cityID) {
+        var key = '{yourkey}';
+        fetch('https://api.openweathermap.org/data/2.5/weather?q=' + cityID + '&appid=' + '4a01ac9f850a28179216c4fce3d8b212')
+            .then(function (resp) { return resp.json() }) // Convert data to json
+            .then(function (data) {
+                drawWeather(data); // Call drawWeather
+                console.log(data);
+            })
+            .catch(function () {
+                // catch any errors
+            });
+    }
+
+    window.onload = function () {
+        weatherBalloon('Bristol,uk');
+    }
+    function drawWeather(d) {
+        var celcius = Math.round(parseFloat(d.main.temp) - 273.15);
+        var fahrenheit = Math.round(((parseFloat(d.main.temp) - 273.15) * 1.8) + 32);
+
+        document.getElementById('description').innerHTML = d.weather[0].description;
+        document.getElementById('temp').innerHTML = 'Temp: ' + celcius + '&deg;c';
+        document.getElementById('location').innerHTML = 'Current weather (' + d.name + '):';
+        document.getElementById('windSpeed').innerHTML = 'Wind: ' + d.wind.speed + ' m/s';
+        document.getElementById('weatherIcon').src = "./WeatherIcons/" + d.weather[0].icon + ".png";
+    }
+
+    //Link scripts (third box)
+
+    function CSSFunction(thisElement) {
+        //Make link textboxes appear
+        var i = document.getElementById('vanishAppear');
+        document.getElementById('vanishAppear').style.visibility = "visible";
+        console.log("CSS Function executed!");
+        //Set value of form to match link id number
+        var j = thisElement.id;
+        document.getElementById('formSubmit').value = j;
+    }
+
+    function CSSHide() {
+        //Make form vanish
+        document.getElementById('vanishAppear').style.visibility = "hidden";
+    }
+</script>
+
+
 <div class="text-center background1">
     <h1 class="gm-text" id=time4></h1>
-    <!--<h1 class="gm-text">Date : @DateTime.Now</h1>-->
-    <!--<document.getElementById('time').innerHTML = Date.now();-->
-    <script>
-        var fxn = function () {
-            var date = new Date();
-            var dateHours = date.getHours();
-            var dateMins = date.getMinutes();
-            if (dateMins < 10) {
-                dateMins = ['0', dateMins].join('')
-            }
-            dateHours2 = dateHours - 8;
-            if (dateHours2 < 0) {
-                dateHours2 = dateHours2 + 24;
-            }
-            dateHours3 = dateHours - 6;
-            if (dateHours3 < 0) {
-                dateHours3 = dateHours3 + 24;
-            }
-            document.getElementById('time').innerHTML = [dateHours, ':', dateMins].join('');
-            document.getElementById('time2').innerHTML = [(dateHours2), ':', dateMins].join('');
-            document.getElementById('time3').innerHTML = [(dateHours3), ':', dateMins].join('');
-            if (dateHours > 0 && dateHours < 12) {
-                document.getElementById('time4').innerHTML = "Good morning, Richard.";
-            }
-            else if (dateHours > 12 && dateHours < 17) {
-                document.getElementById('time4').innerHTML = "Good afternoon, Richard.";
-            }
-            else {
-                document.getElementById('time4').innerHTML = "Good evening, Richard.";
-            }
-        }
-        setInterval(fxn, 1000);
-    </script>
-
-
     <div class="overlay"></div>
     <div class="container-fluid options-custom">
         <div class="row">
+
+            <!--Time Panel-->
+
             <div class="box-custom col-sm-3 mx-auto">
-                <h2>Local Time:</h2>
-                <h1 id=time></h1>
-                <h2>Portland OR Time:</h2>
-                <h1 id=time2></h1>
-                <h2>STT:</h2>
-                <h1 id=time3></h1>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h1>Timezones</h1>
+                    </div>
+                </div><br />
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h1>Local Time:</h1>
+                    </div>
+                    <div class="col-sm-4">
+                        <h1 id=time></h1>
+                    </div>
+                </div><br /><br />
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h1>Portland, OR:</h1>
+                    </div>
+                    <div class="col-sm-4">
+                        <h1 id=time2></h1>
+                    </div>
+                </div><br /><br />
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h1>Chicago, IL:</h1>
+                    </div>
+                    <div class="col-sm-4">
+                        <h1 id=time3></h1>
+                    </div>
+                </div>
             </div>
+
+            <!--Weather Panel-->
+
             <div class="box-custom col-sm-3 mx-auto">
                 <h1 id="location"></h1>
-                <br>
+                <br /><br /><br />
                 <div id="weather">
                     <div class="row">
                         <div class="col-sm-6">
@@ -70,7 +147,7 @@
                             <img id="weatherIcon" />
                         </div>
                     </div>
-                    <br>
+                    <br /><br /><br />
                     <div class="row">
                         <div class="col-sm-6">
                             <h3 id="temp"></h3>
@@ -81,137 +158,168 @@
                     </div>
                 </div>
             </div>
-            <script lang="text/javascript">
-                function weatherBalloon(cityID) {
-                    var key = '{yourkey}';
-                    fetch('https://api.openweathermap.org/data/2.5/weather?q=' + cityID + '&appid=' + '4a01ac9f850a28179216c4fce3d8b212')
-                        .then(function (resp) { return resp.json() }) // Convert data to json
-                        .then(function (data) {
-                            drawWeather(data); // Call drawWeather
-                            console.log(data);
-                        })
-                        .catch(function () {
-                            // catch any errors
-                        });
-                }
 
-                window.onload = function () {
-                    weatherBalloon('Bristol,uk');
-                }
-                function drawWeather(d) {
-                    var celcius = Math.round(parseFloat(d.main.temp) - 273.15);
-                    var fahrenheit = Math.round(((parseFloat(d.main.temp) - 273.15) * 1.8) + 32);
+            <!--Links Panel-->
 
-                    document.getElementById('description').innerHTML = d.weather[0].description;
-                    document.getElementById('temp').innerHTML = 'Temp: ' + celcius + '&deg;c';
-                    document.getElementById('location').innerHTML = 'Current weather (' + d.name + '):';
-                    document.getElementById('windSpeed').innerHTML = 'Wind: ' + d.wind.speed + ' m/s';
-                    document.getElementById('weatherIcon').src = "http://openweathermap.org/img/w/" + d.weather[0].icon + ".png";
-                }
-            </script>
             <div class="box-custom col-sm-3 mx-auto">
                 <div class="container-fluid">
                     <br />
                     <div class="row">
                         <div class="col-sm-3 linkHover">
-                            <a href="https://www.reddit.com/">
-                                <img class="linkIco" src="https://icons.duckduckgo.com/ip2/reddit.com.ico" width="64" height="64" />
+                            <a target="_blank" href="@Model[0].WebsiteAddress">
+                                <img class="linkIco" src="@Model[0].IcoAddress" width="64" height="64" />
                             </a>
-                            <a href="https://www.google.com/">
-                                <img src="./edit-pencil.png" width="16" height="16" class="pencilEdit" />
-                            </a>
-                            <p>Reddit</p>
+                            <img src="./edit-pencil.png" id="1" width="16" height="16" class="pencilEdit" onclick="CSSFunction(this)" />
+                            <p>@Model[0].WebsiteName</p>
                         </div>
-                        <div class="col-sm-3">
-                            <a href="https://tweetdeck.twitter.com/">
-                                <img src="https://icons.duckduckgo.com/ip2/twitter.com.ico" width="64" height="64" />
+                        <div class="col-sm-3 linkHover">
+                            <a target="_blank" href="@Model[1].WebsiteAddress">
+                                <img src="@Model[1].IcoAddress" width="64" height="64" />
                             </a>
-                            <p>Twitter</p>
+                            <img src="./edit-pencil.png" id="2" width="16" height="16" class="pencilEdit" onclick="CSSFunction(this)" />
+
+                            <p>@Model[1].WebsiteName</p>
                         </div>
-                        <div class="col-sm-3">
-                            <a href="https://tweetdeck.twitter.com/">
-                                <img src="https://icons.duckduckgo.com/ip2/twitter.com.ico" width="64" height="64" />
+                        <div class="col-sm-3 linkHover">
+                            <a target="_blank" href="@Model[2].WebsiteAddress">
+                                <img src="@Model[2].IcoAddress" width="64" height="64" />
                             </a>
-                            <p>Twitter</p>
+                            <img src="./edit-pencil.png" id="3" width="16" height="16" class="pencilEdit" onclick="CSSFunction(this)" />
+
+                            <p>@Model[2].WebsiteName</p>
                         </div>
-                        <div class="col-sm-3">
-                            <a href="https://tweetdeck.twitter.com/">
-                                <img src="https://icons.duckduckgo.com/ip2/twitter.com.ico" width="64" height="64" />
+                        <div class="col-sm-3 linkHover">
+                            <a target="_blank" href="@Model[3].WebsiteAddress">
+                                <img src="@Model[3].IcoAddress" width="64" height="64" />
                             </a>
-                            <p>Twitter</p>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <a href="https://www.reddit.com/">
-                                <img src="https://icons.duckduckgo.com/ip2/reddit.com.ico" href="https://www.reddit.com/" width="64" height="64" />
-                            </a>
-                            <p>Reddit</p>
-                        </div>
-                        <div class="col-sm-3">
-                            <a href="https://tweetdeck.twitter.com/">
-                                <img src="https://icons.duckduckgo.com/ip2/twitter.com.ico" width="64" height="64" />
-                            </a>
-                            <p>Twitter</p>
-                        </div>
-                        <div class="col-sm-3">
-                            <a href="https://tweetdeck.twitter.com/">
-                                <img src="https://icons.duckduckgo.com/ip2/twitter.com.ico" width="64" height="64" />
-                            </a>
-                            <p>Twitter</p>
-                        </div>
-                        <div class="col-sm-3">
-                            <a href="https://tweetdeck.twitter.com/">
-                                <img src="https://icons.duckduckgo.com/ip2/twitter.com.ico" width="64" height="64" />
-                            </a>
-                            <p>Twitter</p>
+                            <img src="./edit-pencil.png" id="4" width="16" height="16" class="pencilEdit" onclick="CSSFunction(this)" />
+
+                            <p>@Model[3].WebsiteName</p>
                         </div>
                     </div>
                     <br />
                     <div class="row">
-                        <div class="col-sm-3">
-                            <a href="https://www.reddit.com/">
-                                <img src="https://icons.duckduckgo.com/ip2/reddit.com.ico" href="https://www.reddit.com/" width="64" height="64" />
+                        <div class="col-sm-3 linkHover">
+                            <a target="_blank" href="@Model[4].WebsiteAddress">
+                                <img src="@Model[4].IcoAddress" href="https://www.reddit.com/" width="64" height="64" />
                             </a>
-                            <p>Reddit</p>
+                            <img src="./edit-pencil.png" id="5" width="16" height="16" class="pencilEdit" onclick="CSSFunction(this)" />
+
+                            <p>@Model[4].WebsiteName</p>
                         </div>
-                        <div class="col-sm-3">
-                            <a href="https://tweetdeck.twitter.com/">
-                                <img src="https://icons.duckduckgo.com/ip2/twitter.com.ico" width="64" height="64" />
+                        <div class="col-sm-3 linkHover">
+                            <a target="_blank" href="@Model[5].WebsiteAddress">
+                                <img src="@Model[5].IcoAddress" width="64" height="64" />
                             </a>
-                            <p>Twitter</p>
+                            <img src="./edit-pencil.png" id="6" width="16" height="16" class="pencilEdit" onclick="CSSFunction(this)" />
+
+                            <p>@Model[5].WebsiteName</p>
                         </div>
-                        <div class="col-sm-3">
-                            <a href="https://tweetdeck.twitter.com/">
-                                <img src="https://icons.duckduckgo.com/ip2/twitter.com.ico" width="64" height="64" />
+                        <div class="col-sm-3 linkHover">
+                            <a target="_blank" href="@Model[6].WebsiteAddress">
+                                <img src="@Model[6].IcoAddress" width="64" height="64" />
                             </a>
-                            <p>Twitter</p>
+                            <img src="./edit-pencil.png" id="7" width="16" height="16" class="pencilEdit" onclick="CSSFunction(this)" />
+
+                            <p>@Model[6].WebsiteName</p>
                         </div>
-                        <div class="col-sm-3">
-                            <a href="https://tweetdeck.twitter.com/">
-                                <img src="https://icons.duckduckgo.com/ip2/twitter.com.ico" width="64" height="64" />
+                        <div class="col-sm-3 linkHover">
+                            <a target="_blank" href="@Model[7].WebsiteAddress">
+                                <img src="@Model[7].IcoAddress" width="64" height="64" />
                             </a>
-                            <p>Twitter</p>
+                            <img src="./edit-pencil.png" id="8" width="16" height="16" class="pencilEdit" onclick="CSSFunction(this)" />
+
+                            <p>@Model[7].WebsiteName</p>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-3 linkHover">
+                            <a target="_blank" href="@Model[8].WebsiteAddress">
+                                <img src="@Model[8].IcoAddress" href="https://www.reddit.com/" width="64" height="64" />
+                            </a>
+                            <img src="./edit-pencil.png" id="9" width="16" height="16" class="pencilEdit" onclick="CSSFunction(this)" />
+
+                            <p>@Model[8].WebsiteName</p>
+                        </div>
+                        <div class="col-sm-3 linkHover">
+                            <a target="_blank" href="@Model[9].WebsiteAddress">
+                                <img src="@Model[9].IcoAddress" width="64" height="64" />
+                            </a>
+                            <img src="./edit-pencil.png" id="10" width="16" height="16" class="pencilEdit" onclick="CSSFunction(this)" />
+
+                            <p>@Model[9].WebsiteName</p>
+                        </div>
+                        <div class="col-sm-3 linkHover">
+                            <a target="_blank" href="@Model[10].WebsiteAddress">
+                                <img src="@Model[10].IcoAddress" width="64" height="64" />
+                            </a>
+                            <img src="./edit-pencil.png" id="11" width="16" height="16" class="pencilEdit" onclick="CSSFunction(this)" />
+
+                            <p>@Model[10].WebsiteName</p>
+                        </div>
+                        <div class="col-sm-3 linkHover">
+                            <a target="_blank" href="@Model[11].WebsiteAddress">
+                                <img src="@Model[11].IcoAddress" width="64" height="64" />
+                            </a>
+                            <img src="./edit-pencil.png" id="12" width="16" height="16" class="pencilEdit" onclick="CSSFunction(this)" />
+
+                            <p>@Model[11].WebsiteName</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!--Links input box-->
+
+    <div class="container-fluid edit-custom">
+        <div class="row">
+            <div class="box-custom col-sm-3 mx-auto editBox1">
+            </div>
+            <div class="box-custom col-sm-3 mx-auto editBox2">
+            </div>
+            <div class="box-custom col-sm-3 mx-auto editBox3" id="vanishAppear">
+                <br />
+                <form method="post" asp-action="Post" asp-controller="Home">
+                    <input type="hidden" id="formSubmit" asp-for="@Model[0].Id">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for="wsite">Name:</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <input type="text" maxlength="11" asp-for="@Model[0].WebsiteName" id="formName"><br><br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for="sname">Address:</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <input type="text" asp-for="@Model[0].WebsiteAddress" id="formAddress"><br><br>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for="iconame">Ico:</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <input type="text" asp-for="@Model[0].IcoAddress" id="formIco"><br><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="submit" value="Submit" style="position: relative; top: 54px;" onclick="CSSHide()">
+                        </div>
+                        <div class="col-sm-12">
+                            <p>For the .ico just add site name and domain, eg. 'reddit.com'</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-
-
-<!--                                <a href="https://www.reddit.com/">
-                                    <img src="https://icons.duckduckgo.com/ip2/reddit.com.ico" href="https://www.reddit.com/" width="64" height="64" />
-                                </a>
-                                <p>Reddit<span><img src="./edit-pencil.png" width="16" height="16"/></span></p>-->
-<!--<script>
-    function deployLinks() {
-        document.getElementById('linkModule').insertAdjacentHTML =
-            ('afterbegin', "<a href='https://www.reddit.com/'><img src='https://icons.duckduckgo.com/ip2/reddit.com.ico' href='https://www.reddit.com/' width='64' height='64' /></a><p>Reddit<span><img src='./edit-pencil.png' width='16' height='16' /></span></p>");
-    }
-    window.onload = function () {
-        deployLinks();
-    }
-</script>-->
