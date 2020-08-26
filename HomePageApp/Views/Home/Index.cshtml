@@ -49,7 +49,7 @@
 
     function weatherBalloon(cityID) {
         var key = '{yourkey}';
-        fetch('https://api.openweathermap.org/data/2.5/weather?q=' + cityID + '&appid=' + '4a01ac9f850a28179216c4fce3d8b212')
+        fetch('https://api.openweathermap.org/data/2.5/weather?q=' + cityID + '&appid=' + '0000')
             .then(function (resp) { return resp.json() }) // Convert data to json
             .then(function (data) {
                 drawWeather(data); // Call drawWeather
